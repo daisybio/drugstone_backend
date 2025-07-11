@@ -251,20 +251,20 @@ def populate(kwargs):
         
     
     if kwargs['protein_protein']:
-        print('Importing PPIs from unlicensed NeDRexDB...')
-        n = NedrexImporter.import_protein_protein_interactions(importer,
-                                                               DatasetLoader.get_ppi_nedrex_for_import(nedrex_api_url_open, False),
-                                                               update)
-        total_n += n
-        print(f'Imported {n} PPIs from unlicensed NeDRexDB')
-        print('Importing PPIs from licenced NeDRexDB...')
-        n = NedrexImporter.import_protein_protein_interactions(importer,
-                                                               DatasetLoader.get_ppi_nedrex_for_import(nedrex_api_url_licensed,
-                                                                                                       True),
-                                                               update)
-        total_n += n
-        nedrex_update = True
-        print(f'Imported {n} PPIs from licensed NeDRexDB')
+        #print('Importing PPIs from unlicensed NeDRexDB...')
+        #n = NedrexImporter.import_protein_protein_interactions(importer,
+        #                                                       DatasetLoader.get_ppi_nedrex_for_import(nedrex_api_url_open, False),
+        #                                                       update)
+        #total_n += n
+        #print(f'Imported {n} PPIs from unlicensed NeDRexDB')
+        #print('Importing PPIs from licenced NeDRexDB...')
+        #n = NedrexImporter.import_protein_protein_interactions(importer,
+        #                                                       DatasetLoader.get_ppi_nedrex_for_import(nedrex_api_url_licensed,
+        #                                                                                               True),
+        #                                                       update)
+        #total_n += n
+        #nedrex_update = True
+        #print(f'Imported {n} PPIs from licensed NeDRexDB')
         
         dataset, created = DatasetLoader.get_ppi_omnipath(licensed=False)
         print('Populating PPIs from OmniPath unlicensed...')
