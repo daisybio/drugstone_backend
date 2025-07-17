@@ -9,6 +9,7 @@ class NodeCache:
     gene_name_to_uniprot = defaultdict(lambda: set())
     disorders = dict()
     drugs = dict()
+    drug_name_to_drugbank = dict()
 
     drug_updates = set()
     disorder_updates = set()

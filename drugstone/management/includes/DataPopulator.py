@@ -375,11 +375,11 @@ class DataPopulator:
         bulk = set()
         for _, row in df.iterrows():
             try:
-                proteins = self.cache.get_protein_by_uniprot(row["UNIPROT"]))
+                proteins = self.cache.get_protein_by_uniprot(row["UNIPROT"])
             except KeyError:
                 continue
             try:
-                drugs = self.cache.get_drugs_by_name(row["DRUG"]))
+                drugs = self.cache.get_drugs_by_name(row["DRUG"])
             except KeyError:
                 continue
             for protein in proteins:
