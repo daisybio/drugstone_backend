@@ -69,15 +69,15 @@ class DataPopulator:
                         bulk.append(models.EnsemblGene(name=ensg, protein=protein))
         models.EnsemblGene.objects.bulk_create(bulk)
         return len(bulk)
-    
+
     def populate_ppi_omnipath(self, dataset, update, licensed) -> int:
         self.cache.init_proteins()
         import omnipath as op
         if licensed:
-            all_interactions = op.interactions.AllInteractions.get(directed = False, organism = 'human')
+            all_interactions = op.interactions.AllInteractions.get(directed=False, organism='human')
         else:
-            all_interactions = op.interactions.AllInteractions.get(directed = False, organism = 'human', license="commercial")
-        filtered_interactions = all_interactions[(all_interactions.type.isin(["post_translational","transcriptional"]))]
+            all_interactions = op.interactions.AllInteractions.get(directed=False, organism='human', license="commercial")
+        filtered_interactions = all_interactions[(all_interactions.type.isin(["post_translational", "transcriptional"]))]
         # We cannot visualize complex of proteins currently
         df = filtered_interactions[~filtered_interactions['source'].str.startswith('COMPLEX')]
         df = df[~df['target'].str.startswith('COMPLEX')]
@@ -105,7 +105,7 @@ class DataPopulator:
                 bulk.append(e)
         models.ProteinProteinInteraction.objects.bulk_create(bulk)
         return len(bulk)
-        
+
     def populate_ppi_string(self, dataset, update, import_static_sources) -> int:
         """Populates the Protein-Protein-Interactions from STRINGdb
         Handles loading the data and passing it to the django database
@@ -360,7 +360,7 @@ class DataPopulator:
                     )
         models.ProteinDrugInteraction.objects.bulk_create(bulk)
         return len(bulk)
-    
+
     def populate_pdi_prdb(self, dataset, update) -> int:
         """Populates the Protein-Drug-Interactions from PrDB
         Handles Loading the data and passing it to the django database
@@ -375,23 +375,22 @@ class DataPopulator:
         bulk = set()
         for _, row in df.iterrows():
             try:
-                proteins = self.cache.get_protein_by_uniprot(row["UNIPROT"])
+                protein = self.cache.get_protein_by_uniprot(row["UNIPROT"])
             except KeyError:
                 continue
             try:
                 drugs = self.cache.get_drugs_by_name(row["DRUG"])
             except KeyError:
                 continue
-            for protein in proteins:
-                for durg in drugs:
-                    if not update or (
-                        self.cache.is_new_protein(protein) or self.cache.is_new_drug(drug)
-                    ):
-                        bulk.add(
-                            models.ProteinDrugInteraction(
-                                pdi_dataset=dataset, protein=protein, drug=drug
-                            )
+            for drug in drugs:
+                if not update or (
+                    self.cache.is_new_protein(protein) or self.cache.is_new_drug(drug)
+                ):
+                    bulk.add(
+                        models.ProteinDrugInteraction(
+                            pdi_dataset=dataset, protein=protein, drug=drug
                         )
+                    )
         models.ProteinDrugInteraction.objects.bulk_create(bulk)
         return len(bulk)
 
