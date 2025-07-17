@@ -102,7 +102,7 @@ class NodeCache:
     def get_drug_by_drugbank(self, drugbank_id):
         return self.drugs[drugbank_id]
     
-    def get_drug_by_name(self, drug_name):
+    def get_drugs_by_name(self, drug_name):
         out = list()
         for d in self.drug_name_to_drugbank[drug_name]:
             out.append(self.drugs[d])
