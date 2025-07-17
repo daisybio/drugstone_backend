@@ -373,7 +373,25 @@ class DataPopulator:
 
         df = DataLoader.load_pdi_prdb()
         bulk = set()
-
+        for _, row in df.iterrows():
+            try:
+                proteins = self.cache.get_protein_by_uniprot(row["UNIPROT"]))
+            except KeyError:
+                continue
+            try:
+                drugs = self.cache.get_drugs_by_name(row["DRUG"]))
+            except KeyError:
+                continue
+            for protein in proteins:
+                for durg in drugs:
+                    if not update or (
+                        self.cache.is_new_protein(protein) or self.cache.is_new_drug(drug)
+                    ):
+                        bulk.add(
+                            models.ProteinDrugInteraction(
+                                pdi_dataset=dataset, protein=protein, drug=drug
+                            )
+                        )
         models.ProteinDrugInteraction.objects.bulk_create(bulk)
         return len(bulk)
 
