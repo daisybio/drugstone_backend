@@ -204,6 +204,15 @@ def populate(kwargs):
         else:
             print('DGIdb already populated.')
 
+        dataset, created = DatasetLoader.get_drug_target_prdb()
+        if created:
+            print('Populating PDIs from PrDB...')
+            #n = DataPopulator.populate_pdi_prdb(populator, dataset, update)
+            total_n += n
+            print(f'Populated {n} PDIs from PrDB.')
+        else:
+            print('PrDB already populated.')
+
     if kwargs['protein_disorder']:
         print('Importing PDis from unlicensed NeDRexDB...')
         n = NedrexImporter.import_protein_disorder_associations(importer,

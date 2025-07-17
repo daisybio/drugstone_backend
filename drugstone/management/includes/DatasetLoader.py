@@ -164,6 +164,15 @@ def get_drug_target_drugbank():
     return dataset
 
 
+def get_drug_target_prdb():
+    return models.PDIDataset.objects.get_or_create(
+        name="PrDB",
+        link="https://www.proteomicsdb.org/",
+        version="1.0",
+        licenced=False,
+    )
+
+
 def get_disorder_protein_disgenet():
     dataset, _ = models.PDisDataset.objects.get_or_create(
         name="DisGeNET",
