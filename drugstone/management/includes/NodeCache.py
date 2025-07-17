@@ -43,7 +43,7 @@ class NodeCache:
                 self.proteins[protein.uniprot_code] = protein
         if len(self.proteins) > 0 and (len(self.entrez_to_uniprot) == 0 or len(self.gene_name_to_uniprot) == 0):
             self.init_protein_maps()
-            
+
     def create_cellularComponent(self):
         if len(self.cellularComponent) == 0:
             print("Generating cellular component...")
@@ -54,7 +54,8 @@ class NodeCache:
         print("Generating drug id maps...")
         self.drug_name_to_drugbank = defaultdict(lambda: set())
         for drug in self.drugs.values():
-            self.drug_name_to_drugbank[drug.name].add(drug.drug_id)
+            curr_drug_name = str(drug.name).lower().strip()
+            self.drug_name_to_drugbank[curr_drug_name].add(drug.drug_id)
 
     def init_drugs(self):
         if len(self.drugs) == 0:
@@ -72,7 +73,7 @@ class NodeCache:
 
     def is_new_protein(self, protein: models.Protein):
         return protein.uniprot_code in self.protein_updates
-    
+
     def has_protein(self, uniprot_id):
         return uniprot_id in self.proteins
 
@@ -84,7 +85,7 @@ class NodeCache:
 
     def get_protein_by_uniprot(self, uniprot_id):
         return self.proteins[uniprot_id]
-    
+
     def get_cellularComponent_by_go(self, go_id):
         return self.cellularComponent[go_id]
 
@@ -102,9 +103,10 @@ class NodeCache:
 
     def get_drug_by_drugbank(self, drugbank_id):
         return self.drugs[drugbank_id]
-    
+
     def get_drugs_by_name(self, drug_name):
         out = list()
+        drug_name = str(drug_name).lower().strip()
         for d in self.drug_name_to_drugbank[drug_name]:
             out.append(self.drugs[d])
         return out

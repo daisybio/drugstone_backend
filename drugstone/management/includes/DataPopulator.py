@@ -1,6 +1,7 @@
 from drugstone.management.includes.DataLoader import DataLoader
 import drugstone.models as models
 from drugstone.management.includes.NodeCache import NodeCache
+from django.db.utils import IntegrityError
 
 
 class DataPopulator:
@@ -370,7 +371,6 @@ class DataPopulator:
         """
         self.cache.init_proteins()
         self.cache.init_drugs()
-
         df = DataLoader.load_pdi_prdb()
         bulk = set()
         for _, row in df.iterrows():
@@ -391,7 +391,10 @@ class DataPopulator:
                             pdi_dataset=dataset, protein=protein, drug=drug
                         )
                     )
-        models.ProteinDrugInteraction.objects.bulk_create(bulk)
+        try:
+            models.ProteinDrugInteraction.objects.bulk_create(bulk)
+        except IntegrityError as exc:
+            print(f"IntegrityError during bulk create: {exc}")
         return len(bulk)
 
     # def populate_pdi_drugbank(self,dataset, update) -> int:
