@@ -21,6 +21,7 @@ class NodeCache:
         self.gene_name_to_uniprot = defaultdict(lambda: set())
         self.disorders = dict()
         self.drugs = dict()
+        self.drug_name_to_drugbank = dict()
 
         self.drug_updates = set()
         self.disorder_updates = set()
@@ -48,11 +49,19 @@ class NodeCache:
             for cellularComponent in models.CellularComponent.objects.all():
                 self.cellularComponent[cellularComponent.go_code] = cellularComponent
 
+    def init_drug_maps(self):
+        print("Generating drug id maps...")
+        self.drug_name_to_drugbank = defaultdict(lambda: set())
+        for drug in self.drugs.values():
+            self.drug_name_to_drugbank[drug.name].add(drug.drug_id)
+
     def init_drugs(self):
         if len(self.drugs) == 0:
             print("Generating drug map...")
             for drug in models.Drug.objects.all():
                 self.drugs[drug.drug_id] = drug
+        if len(self.drugs) > 0 and len(self.drug_name_to_drugbank) == 0:
+            self.init_drug_maps()
 
     def init_disorders(self):
         if len(self.disorders) == 0:
@@ -92,6 +101,12 @@ class NodeCache:
 
     def get_drug_by_drugbank(self, drugbank_id):
         return self.drugs[drugbank_id]
+    
+    def get_drug_by_name(self, drug_name):
+        out = list()
+        for d in self.drug_name_to_drugbank[drug_name]:
+            out.append(self.drugs[d])
+        return out
 
     def get_disorder_by_mondo(self, mondo_id):
         return self.disorders[mondo_id]
