@@ -125,3 +125,12 @@ class DataLoader:
         df = pd.read_csv(f"{DataLoader.PATH_PDI}{DataLoader.PDI_DGIDB}", index_col=0)
         df["entrez_id"] = df["entrez_id"].map(DataLoader._clean_entrez)
         return df
+    
+    def load_pdi_prdb() -> pd.DataFrame:
+        """Loads the PrDB PDI interactions with Uniprot ACs
+
+        Returns:
+            pd.DataFrame: columns "uniprot_ac" and "entrez_id"
+        """
+        print("test")
+        return None

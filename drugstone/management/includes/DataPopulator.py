@@ -360,6 +360,22 @@ class DataPopulator:
                     )
         models.ProteinDrugInteraction.objects.bulk_create(bulk)
         return len(bulk)
+    
+    def populate_pdi_prdb(self, dataset, update) -> int:
+        """Populates the Protein-Drug-Interactions from PrDB
+        Handles Loading the data and passing it to the django database
+
+        Returns:
+            int: Count of how many interactions were added
+        """
+        self.cache.init_proteins()
+        self.cache.init_drugs()
+
+        df = DataLoader.load_pdi_prdb()
+        bulk = set()
+
+        models.ProteinDrugInteraction.objects.bulk_create(bulk)
+        return len(bulk)
 
     # def populate_pdi_drugbank(self,dataset, update) -> int:
     #     """ Populates the Protein-Drug-Interactions from Drugbank

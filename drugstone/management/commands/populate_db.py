@@ -205,9 +205,9 @@ def populate(kwargs):
             print('DGIdb already populated.')
 
         dataset, created = DatasetLoader.get_drug_target_prdb()
-        if created:
+        if True:
             print('Populating PDIs from PrDB...')
-            #n = DataPopulator.populate_pdi_prdb(populator, dataset, update)
+            n = DataPopulator.populate_pdi_prdb(populator, dataset, update)
             total_n += n
             print(f'Populated {n} PDIs from PrDB.')
         else:
