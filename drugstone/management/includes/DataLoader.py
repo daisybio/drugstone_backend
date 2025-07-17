@@ -32,6 +32,7 @@ class DataLoader:
     PDI_CHEMBL = "chembl_drug_gene_interactions_uniq.csv"
     PDI_DGIDB = "DGIdb_drug_gene_interactions.csv"
     # PDI_DRUGBANK = 'drugbank_drug_gene_interactions_uniq.csv'
+    PDI_PRDB = "drug_targets_prdb.csv"
 
     # Protein-Disorder-Interaction
     # PDi_DISGENET = 'disgenet-protein_disorder_association.tsv'
@@ -126,11 +127,13 @@ class DataLoader:
         df["entrez_id"] = df["entrez_id"].map(DataLoader._clean_entrez)
         return df
     
+    @staticmethod
     def load_pdi_prdb() -> pd.DataFrame:
-        """Loads the PrDB PDI interactions with Uniprot ACs
+        """Loads the PrDB PDI interactions
 
         Returns:
-            pd.DataFrame: columns "uniprot_ac" and "entrez_id"
+            pd.DataFrame: columns GENE_NAME	UNIPROT	DRUG PROTEIN_ID	EXPERIMENTAL_FACTOR_CV_ID
+
         """
-        print("test")
-        return None
+        df = pd.read_csv(f"{DataLoader.PATH_PDI}{DataLoader.PDI_PRDB}")
+        return df
